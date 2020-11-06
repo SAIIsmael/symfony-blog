@@ -11,6 +11,7 @@ use App\Repository\ArticleRepository;
 use App\Repository\CategoriesRepository;
 use App\Repository\CommentsRepository;
 use App\Entity\Article;
+use App\Entity\Users;
 use App\Entity\Categories;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -56,9 +57,9 @@ class CRUDArticlesController extends AbstractController
     }
 
     /**
-     * @Route("/createarticle", name="createarticle")
+     * @Route("/createarticle/{id}", name="createarticle")
      */
-    public function createarticle(CategoriesRepository $repoCat, UsersRepository $repoUsers, Request $request, ArticleRepository $repoArticle, EntityManagerInterface $manager): Response
+    public function createarticle(Users $user, CategoriesRepository $repoCat, UsersRepository $repoUsers, Request $request, ArticleRepository $repoArticle, EntityManagerInterface $manager): Response
     {
         $categories = $repoCat->findAll();
         $article = new Article();
@@ -84,7 +85,7 @@ class CRUDArticlesController extends AbstractController
     $form->handleRequest($request);
     if( $form->isSubmitted() ){
           $article->setADate(new \DateTime());
-          $article->setAPoster($repoUsers->find(1));
+          $article->setAPoster($user);
 
           $catName = $request->request->get('cat');
           $cat = $repoCat->findOneByTitle($catName);

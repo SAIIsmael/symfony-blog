@@ -3,14 +3,21 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Users
  *
  * @ORM\Table(name="users")
  * @ORM\Entity(repositoryClass="App\Repository\UsersRepository")
+ * @UniqueEntity(
+ * fields={"uMail"},
+ * message="L'email est déjà utilisé."
+ * )
  */
-class Users
+class Users implements UserInterface
 {
     /**
      * @var int
@@ -46,6 +53,7 @@ class Users
      * @var string
      *
      * @ORM\Column(name="u_mail", type="string", length=320, nullable=false)
+     * @Assert\Email()
      */
     private $uMail;
 
@@ -53,8 +61,14 @@ class Users
      * @var string
      *
      * @ORM\Column(name="u_pass", type="string", length=32, nullable=false, options={"fixed"=true})
+     * @Assert\Length(min=4, minMessage="Votre mot de passe doit contenir 4 caractères")
      */
     private $uPass;
+
+    /**
+     * @Assert\EqualTo(propertyPath="uPass",  message="Les mots de passes sont différents")
+     */
+    public $confirm_uPass;
 
     public function getUId(): ?int
     {
@@ -62,6 +76,11 @@ class Users
     }
 
     public function getUName(): ?string
+    {
+        return $this->uName;
+    }
+
+    public function getUsername(): ?string
     {
         return $this->uName;
     }
@@ -114,11 +133,31 @@ class Users
         return $this->uPass;
     }
 
+    public function getPassword(): ?string
+    {
+        return $this->uPass;
+    }
+
     public function setUPass(string $uPass): self
     {
         $this->uPass = $uPass;
 
         return $this;
+    }
+
+    public function eraseCredentials()
+    {
+    
+    }
+
+    public function getSalt()
+    {
+
+    }
+
+    public function getRoles()
+    {
+        return ['ROLE_USER'];
     }
 
 
