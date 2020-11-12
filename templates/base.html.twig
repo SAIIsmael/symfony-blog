@@ -43,11 +43,14 @@
           <a class="nav-link" href={{path('login')}}><i class="fas fa-sign-in-alt"></i> Connexion</a>
         </li>
         {% else %}
-        <li class="nav-item">
-          <a class="nav-link" href={{path('logout')}}><i class="fas fa-sign-out-alt"></i> Deconnexion</a>
+          <li class="nav-item">
+          <a href="{{ path('myarticles', {'id' : app.user.uId}) }}" class="nav-link"><i class="fas fa-newspaper"></i> Mes articles</a>
         </li>
         <li class="nav-item">
           <a href="{{ path('createarticle', {'id' : app.user.uId}) }}" class="nav-link"><i class="fas fa-pencil-alt"></i> Écrire un article</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href={{path('logout')}}><i class="fas fa-sign-out-alt"></i> Deconnexion</a>
         </li>
         {% endif %}
       </ul>

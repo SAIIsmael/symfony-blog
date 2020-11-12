@@ -14,7 +14,7 @@
       <h2>Mes articles</h2>
       <ul class="menu-crud">
         <li class="nav-item">
-          <a class="nav-link" href="{{ path('createarticle') }}"><i class="fas fa-plus-square"></i> Écrire un article</a>
+          <a class="nav-link" href="{{ path('createarticle',  { 'id' :  app.user.uId }) }}"><i class="fas fa-plus-square"></i> Écrire un article</a>
         </li>
         <li class="nav-item">
         </li>
