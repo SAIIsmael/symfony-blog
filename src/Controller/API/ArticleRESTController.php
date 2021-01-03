@@ -10,34 +10,27 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
 class ArticleRESTController extends AbstractController
 {
        /**
-     * @Route("/getarticles/{id}", name="getarticles")
+     * @Route("/api/getarticles", name="apigetarticles", methods={"GET"})
      */
-    public function index($id,UsersRepository $repoUsers, ArticleRepository $repoArticle, EntityManagerInterface $manager): Response
+    public function index(ArticleRepository $repoArticle, EntityManagerInterface $manager, NormalizerInterface $normalizer): Response    
     {
-        $articles = $repoArticle->findByPoster($id);
+        $articles = $repoArticle->findAll();
         dump($articles);
 
-        $encoders = [new XmlEncoder(), new JsonEncoder()];
-        $normalizers = [new ObjectNormalizer()];
-        $serializer = new Serializer($normalizers, $encoders);
-        $jsoncontent = $serializer->serialize($articles, 'json');
+        $articlesNorm = $normalizer->normalize($articles);
+        $json = json_encode($articlesNorm);
    
-   
-        $response = new Response($jsoncontent);
-        $response->headers->set('Content-Type', 'application/json');
-        $response->headers->set('Access-Control-Allow-Origin', '*');
-        $response->headers->set('Access-Control-Allow-Methods', 'get');
-        $response->headers->set('Access-Control-Allow-Credentials', 'true');
-        $response->headers->set('Access-Control-Allow-Headers', 'Content-Type, *');
-        return $response;
-   
+        return new Response($json, 200, [
+            "Content-Type" => "application/json"
+        ]);
     }
 
 }

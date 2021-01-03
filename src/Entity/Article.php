@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Article
@@ -17,6 +18,7 @@ class Article
      *
      * @ORM\Column(name="a_ID", type="integer", nullable=false)
      * @ORM\Id
+     * @Groups("post:read")
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $aId;
@@ -25,6 +27,7 @@ class Article
      * @var \DateTime
      *
      * @ORM\Column(name="a_date", type="datetime", nullable=false)
+     * @Groups("post:read")
      */
     private $aDate;
 
@@ -32,6 +35,7 @@ class Article
      * @var string
      *
      * @ORM\Column(name="a_content", type="text", length=0, nullable=false)
+     * @Groups("post:read")
      */
     private $aContent;
 
@@ -39,6 +43,7 @@ class Article
      * @var int
      *
      * @ORM\Column(name="a_likesCpt", type="integer", nullable=false, options={"unsigned"=true})
+     * @Groups("post:read")
      */
     private $aLikescpt = '0';
 
@@ -46,6 +51,7 @@ class Article
      * @var int
      *
      * @ORM\Column(name="a_cmtCpt", type="integer", nullable=false, options={"unsigned"=true})
+     * @Groups("post:read")
      */
     private $aCmtcpt = '0';
 
@@ -53,6 +59,7 @@ class Article
      * @var string
      *
      * @ORM\Column(name="a_title", type="text", length=65535, nullable=false)
+     * @Groups("post:read")
      */
     private $aTitle;
 
@@ -60,6 +67,7 @@ class Article
      * @var string|null
      *
      * @ORM\Column(name="a_pic", type="string", length=320, nullable=true)
+     * @Groups("post:read")
      */
     private $aPic;
 
@@ -70,6 +78,7 @@ class Article
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="a_poster", referencedColumnName="u_ID")
      * })
+     * @Groups("post:read")
      */
     private $aPoster;
 
@@ -80,6 +89,7 @@ class Article
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="a_category", referencedColumnName="c_ID")
      * })
+     * @Groups("post:read")
      */
     private $aCategory;
 

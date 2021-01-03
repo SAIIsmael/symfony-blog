@@ -2,16 +2,20 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Article;
 use App\Entity\Users;
+use App\Entity\Article;
 use App\Entity\Comments;
+use App\Form\CommentType;
 use App\Entity\Categories;
+use App\Repository\UsersRepository;
 use App\Repository\ArticleRepository;
 use App\Repository\CommentsRepository;
 use App\Repository\CategoriesRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BlogController extends AbstractController
 {
@@ -26,16 +30,29 @@ class BlogController extends AbstractController
     }
 
     /**
-     * @Route("/article/{id}", name="article")
+     * @Route("/article/{id}/{user}", name="article")
      */
-    public function article($id, ArticleRepository $repoArticle, CommentsRepository $repoComments){
+    public function article($id, $user, UsersRepository $repoUser,ArticleRepository $repoArticle, CommentsRepository $repoComments, Request $request, EntityManagerInterface $manager){
 
       $article = $repoArticle->find($id);
+      $poster = $repoUser->find($user);
       $comments = $repoComments->findByReferencedArticle($id);
+      $comment = new Comments();
+      $form = $this->createForm(CommentType::Class, $comment);
 
+      $form->handleRequest($request);
+
+      if($form->isSubmitted()){
+        $comment->setCoPostedat(new \DateTime())
+                ->setCoArtref($article)
+                ->setCoPostedby($poster);
+        $manager->persist($comment);
+        $manager->flush();
+      }
       return $this->render('blog/article.html.twig', [
         'article' => $article,
         'comments' => $comments,
+        'commentForm' => $form->createView()
       ]);
     }
 

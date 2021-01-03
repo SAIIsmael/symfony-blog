@@ -6,15 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\HttpFoundation\File\File;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * Users
  *
  * @ORM\Table(name="users")
  * @ORM\Entity(repositoryClass="App\Repository\UsersRepository")
- * @Vich\Uploadable
  * @UniqueEntity(
  * fields={"uMail"},
  * message="L'email est déjà utilisé."
@@ -44,12 +41,6 @@ class Users implements UserInterface
      * @ORM\Column(name="u_pp", type="string", length=255, nullable=true)
      */
     private $uPp;
-
-    /** 
-     * @Vich\UploadableField(mapping="pp", fileNameProperty="uPp")
-     * @var:File
-    */
-    private $uPpFile;
 
     /**
      * @var string|null

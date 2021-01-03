@@ -57,6 +57,23 @@ class CRUDArticlesController extends AbstractController
     }
 
     /**
+     * @Route("/addcomment/{id}", name="addcomment")
+     */
+    public function editarticle(Users $user, CategoriesRepository $repoCat, UsersRepository $repoUsers, Request $request, ArticleRepository $repoArticle, EntityManagerInterface $manager, CommentsRepository $repoComments): Response
+    {
+ 
+      $article = $repoArticle->find($user);
+      $comments = $repoComments->findByReferencedArticle($user);
+      
+
+      return $this->render('blog/article.html.twig', [
+        'article' => $article,
+        'comments' => $comments,
+      ]);
+
+    }
+
+    /**
      * @Route("/createarticle/{id}", name="createarticle")
      */
     public function createarticle(Users $user, CategoriesRepository $repoCat, UsersRepository $repoUsers, Request $request, ArticleRepository $repoArticle, EntityManagerInterface $manager): Response
