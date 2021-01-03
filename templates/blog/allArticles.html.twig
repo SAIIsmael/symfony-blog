@@ -30,8 +30,14 @@
 						<h2 class="subtitle">{{article.getACategoryString()}}</h2>
 						<p class="description">{{article.aContent|striptags|slice(0, 50) ~ '...' }}</p>
 						<div class="cta">
-							<a href="{{ path('article', {'id' : article.aId, 'user' : app.user.uId }) }}">Lire plus &rarr;
-							</a>
+							{% if app.user %}
+								<a href="{{ path('article', {'id' : article.aId, 'user' : app.user.uId }) }}">Lire plus &rarr;
+								</a>
+							{% else %}
+								<a href="{{ path('article', {'id' : article.aId, 'user' : "none" }) }}">Lire plus &rarr;
+								</a>
+
+							{% endif %}
 						</div>
 					</div>
 				</div>

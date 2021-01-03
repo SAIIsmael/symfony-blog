@@ -55,13 +55,17 @@
 					<hr/>
 				</div>
 			{% endfor %}
-			{{ form_start(commentForm) }}
-			{{ form_row(commentForm.coContent, {'attr' : {'placehoder' : 'Contenu' }})}}
+			{% if app.user  %}
+				{{ form_start(commentForm) }}
+				{{ form_row(commentForm.coContent, {'attr' : {'placehoder' : 'Contenu' }})}}
 
-			<button type="submit" class="btn btn-success">
-				Commenter</button>
+				<button type="submit" class="btn btn-success">
+					Commenter</button>
 
-			{{form_end(commentForm)}}
+				{{form_end(commentForm)}}
+			{% else %}
+				Vous devez être connecté pour commenter
+			{% endif %}
 
 		</section>
 	</body>
